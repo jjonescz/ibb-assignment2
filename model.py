@@ -21,6 +21,7 @@ AWE_W = 480
 AWE_H = 360
 AWE_C = 3
 GROUP_NORM = 16
+EPOCHS = 1
 
 # %%
 
@@ -29,9 +30,11 @@ def load_dataset(basedir, images, segments):
     def transform(path):
         image = tf.io.read_file(path)
         image = tf.io.decode_png(image)
+        image = tf.cast(image, dtype=tf.float32)
         mask_path = tf.strings.regex_replace(path, images, segments)
         mask = tf.io.read_file(mask_path)
         mask = tf.io.decode_png(mask)
+        mask = tf.cast(mask, dtype=tf.float32)
         return image, mask
 
     images_dir = os.path.join(basedir, images)
@@ -149,6 +152,13 @@ model.compile(
     optimizer=tf.optimizers.RMSprop(),
     loss=bce_dice_loss,
     metrics=[AWEMaskIoU(name="accuracy")],
+)
+
+# %%
+model.fit(
+    train,
+    epochs=EPOCHS,
+    validation_data=test
 )
 
 # %%
