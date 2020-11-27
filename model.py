@@ -16,21 +16,6 @@ import efficient_net
 DATASET_PATH = "data"
 
 # %%
-train_dir = os.path.join(DATASET_PATH, 'train')
-train_images = list(map(
-    lambda x: os.path.join(train_dir, x),
-    os.listdir(train_dir)))
-train_segments_dir = os.path.join(DATASET_PATH, 'trainannot')
-train_segments = list(map(
-    lambda x: os.path.join(train_segments_dir, x),
-    os.listdir(train_segments_dir)))
-
-# %%
-image = PIL.Image.open(train_images[0])
-bytes = np.asarray(PIL.Image.open(train_segments[0]))
-mask = PIL.Image.fromarray(bytes * 255)
-
-# %%
 
 
 def load_dataset(basedir, images, segments):
@@ -49,6 +34,7 @@ def load_dataset(basedir, images, segments):
 
 # %%
 train = load_dataset(DATASET_PATH, 'train', 'trainannot')
+test = load_dataset(DATASET_PATH, 'test', 'testannot')
 
 # %%
 efficientnet_b0 = efficient_net.pretrained_efficientnet_b0(include_top=False)
