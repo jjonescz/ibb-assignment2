@@ -1,0 +1,8 @@
+# AWE dataset
+/data/
+
+# Models
+*.h5
+
+# Python
+__pycache__/
