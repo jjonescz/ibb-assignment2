@@ -111,3 +111,44 @@ x = tf.keras.layers.BatchNormalization()(x)
 x = tf.keras.layers.Activation(tf.nn.sigmoid)(x)
 
 # %%
+
+
+def bce_dice_loss(y_true, y_pred):
+    def dice_loss(y_true, y_pred):
+        numerator = 2 * tf.reduce_sum(y_true * y_pred)
+        denominator = tf.reduce_sum(y_true) + tf.reduce_sum(y_pred)
+        return numerator / denominator
+
+    return tf.losses.binary_crossentropy(y_true, y_pred) + 1 - dice_loss(y_true, y_pred)
+
+# %%
+
+
+class AWEMaskIoU(tf.metrics.Mean):
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        y_true_mask = tf.reshape(tf.math.round(
+            y_true) == 1, [-1, AWE_H * AWE_W])
+        y_pred_mask = tf.reshape(tf.math.round(
+            y_pred) == 1, [-1, AWE_H * AWE_W])
+
+        intersection_mask = tf.math.logical_and(y_true_mask, y_pred_mask)
+        union_mask = tf.math.logical_or(y_true_mask, y_pred_mask)
+
+        intersection = tf.reduce_sum(
+            tf.cast(intersection_mask, tf.float32), axis=1)
+        union = tf.reduce_sum(tf.cast(union_mask, tf.float32), axis=1)
+
+        iou = tf.where(union == 0, 1., intersection / union)
+        return super().update_state(iou, sample_weight)
+
+
+# %%
+model = tf.keras.Model(inputs=inputs, outputs=x)
+
+model.compile(
+    optimizer=tf.optimizers.RMSprop(),
+    loss=bce_dice_loss,
+    metrics=[AWEMaskIoU(name="accuracy")],
+)
+
+# %%
