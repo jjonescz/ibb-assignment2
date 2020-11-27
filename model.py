@@ -14,6 +14,8 @@ import efficient_net
 
 # %%
 DATASET_PATH = "data"
+BATCH_SIZE = 5
+SHUFFLE_SIZE = 10000
 
 # %%
 
@@ -35,6 +37,10 @@ def load_dataset(basedir, images, segments):
 # %%
 train = load_dataset(DATASET_PATH, 'train', 'trainannot')
 test = load_dataset(DATASET_PATH, 'test', 'testannot')
+
+# %%
+train = train.cache().shuffle(SHUFFLE_SIZE).batch(BATCH_SIZE)
+test = test.cache().batch(BATCH_SIZE)
 
 # %%
 efficientnet_b0 = efficient_net.pretrained_efficientnet_b0(include_top=False)
