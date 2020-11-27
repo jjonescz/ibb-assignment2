@@ -15,8 +15,8 @@ import efficient_net
 
 # %%
 DATASET_PATH = "data"
-BATCH_SIZE = 5
-SHUFFLE_SIZE = 10000
+BATCH_SIZE = 32
+SHUFFLE_SIZE = 500
 AWE_W = 480
 AWE_H = 360
 AWE_C = 3
@@ -28,13 +28,14 @@ EPOCHS = 1
 
 def load_dataset(basedir, images, segments):
     def transform(path):
-        image = tf.io.read_file(path)
-        image = tf.io.decode_png(image)
-        image = tf.cast(image, dtype=tf.float32)
+        def load(path):
+            image = tf.io.read_file(path)
+            image = tf.io.decode_png(image)
+            return tf.cast(image, dtype=tf.float32)
+
+        image = load(path)
         mask_path = tf.strings.regex_replace(path, images, segments)
-        mask = tf.io.read_file(mask_path)
-        mask = tf.io.decode_png(mask)
-        mask = tf.cast(mask, dtype=tf.float32)
+        mask = load(mask_path)
         return image, mask
 
     images_dir = os.path.join(basedir, images)
