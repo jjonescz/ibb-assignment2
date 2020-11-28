@@ -16,7 +16,7 @@ DATASET_PATH = "data"
 BATCH_SIZE = 10
 SHUFFLE_SIZE = 500
 AWE_W = 480
-AWE_H = 360
+AWE_H = 352  # divisible by 32
 AWE_C = 3
 GROUP_NORM = 16
 EPOCHS = 1
@@ -28,7 +28,8 @@ def load_dataset(basedir, images, segments):
     def transform(path):
         def load(path, channels):
             image = tf.io.read_file(path)
-            return tf.io.decode_png(image, channels=channels)
+            image = tf.io.decode_png(image, channels=channels)
+            return tf.image.resize(image, (AWE_H, AWE_W))
 
         image = load(path, AWE_C)
         mask_path = tf.strings.regex_replace(path, images, segments)
@@ -104,21 +105,20 @@ def skip(x, c, channels):
     return x
 
 
-# x = c5
-# x = decoder(x, 1280, 512)
-# x = skip(x, c4, 512)
-# x = decoder(x, 512, 256)
-# x = skip(x, c3, 256)
-x = c3
+x = c5
+x = deconv_block(x, 512, 3)
+x = skip(x, c4, 256)
 x = deconv_block(x, 256, 3)
-x = skip(x, c2, 128)
+x = skip(x, c3, 128)
 x = deconv_block(x, 128, 3)
-x = skip(x, c1, 64)
+x = skip(x, c2, 64)
 x = deconv_block(x, 64, 3)
+x = skip(x, c1, 32)
+x = deconv_block(x, 32, 3)
 
 # Head
-x = deconv_block(x, 32, 3, 2)
-x = conv_block(x, 32, 3, 2)
+# x = deconv_block(x, 32, 3, 2)
+# x = conv_block(x, 32, 3, 2)
 
 #deconv_block(x, 1, 2, 1)
 x = tf.keras.layers.Conv2DTranspose(
