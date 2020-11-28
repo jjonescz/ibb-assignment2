@@ -20,7 +20,7 @@ AWE_W = 480
 AWE_H = 352  # divisible by 32
 AWE_C = 3
 GROUP_NORM = 16
-EPOCHS = 1
+EPOCHS = 10
 
 # %%
 
@@ -164,10 +164,8 @@ model = tf.keras.Model(inputs=inputs, outputs=x)
 
 model.compile(
     optimizer=tf.optimizers.Adam(),
-    # loss=bce_dice_loss,
-    # metrics=[AWEMaskIoU(name="accuracy")],
-    loss=tf.keras.losses.BinaryCrossentropy(),
-    metrics=['accuracy']
+    loss=bce_dice_loss,
+    metrics=[AWEMaskIoU(name="accuracy")]
 )
 
 # %%
@@ -182,20 +180,19 @@ predicted = model.predict(test)
 
 # %%
 PLOT_ROWS = 3
-SKIP_IMAGES = 10
-for row, ((image, gold_mask), pred_mask) in enumerate(zip(test.unbatch().take(SKIP_IMAGES + PLOT_ROWS), predicted)):
-    if row < SKIP_IMAGES:
-        continue
-
-    row_index = row - SKIP_IMAGES
-
-    ax_im = plt.subplot(PLOT_ROWS, 3, 3 * row_index + 1)
+SKIP_IMAGES = 20
+plt.figure(figsize=(24, 18))
+for row, ((image, gold_mask), pred_mask) in enumerate(zip(test.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS), predicted[SKIP_IMAGES:])):
+    ax_im = plt.subplot(PLOT_ROWS, 3, 3 * row + 1)
     ax_im.imshow(image.numpy().astype('uint8'))
+    ax_im.axis('off')
 
-    ax_g = plt.subplot(PLOT_ROWS, 3, 3 * row_index + 2)
+    ax_g = plt.subplot(PLOT_ROWS, 3, 3 * row + 2)
     ax_g.imshow(gold_mask.numpy().astype('uint8'), cmap='gray', vmin=0, vmax=1)
+    ax_g.axis('off')
 
-    ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row_index + 3)
+    ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row + 3)
     ax_p.imshow(pred_mask.astype('uint8'), cmap='gray', vmin=0, vmax=1)
+    ax_p.axis('off')
 
 # %%
