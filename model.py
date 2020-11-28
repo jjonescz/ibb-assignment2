@@ -11,8 +11,6 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_addons as tfa
 
-import efficient_net
-
 # %%
 DATASET_PATH = "data"
 BATCH_SIZE = 32
@@ -51,14 +49,23 @@ train = train.cache().shuffle(SHUFFLE_SIZE).batch(BATCH_SIZE)
 test = test.cache().batch(BATCH_SIZE)
 
 # %%
-efficientnet_b0 = efficient_net.pretrained_efficientnet_b0(
-    include_top=False, dynamic_shape=True)
+efficientnet_b0 = tf.keras.applications.EfficientNetB0(
+    include_top=False, input_shape=[AWE_H, AWE_W, AWE_C])
 efficientnet_b0.trainable = False
 
 # %%
-x = inputs = tf.keras.layers.Input(shape=[AWE_H, AWE_W, AWE_C])
+efficientnet_layer_names = [
+    'top_activation',
+    'block5c_add',
+    'block3b_add',
+    'block2b_add',
+    'block1a_project_bn'
+]
+[c5, c4, c3, c2, c1] = [efficientnet_b0.get_layer(
+    name=name).output for name in efficientnet_layer_names]
 
-features, c5, c4, c3, c2, c1 = efficientnet_b0(x)
+# %%
+inputs = efficientnet_b0.input
 
 
 def conv_block(x, channels, kernel_size, stride=1):
