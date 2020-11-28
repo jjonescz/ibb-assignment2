@@ -6,6 +6,7 @@ import re
 import PIL
 import PIL.Image
 import PIL.ImageChops
+import matplotlib.pyplot as plt
 
 import numpy as np
 import tensorflow as tf
@@ -170,10 +171,31 @@ model.compile(
 )
 
 # %%
-model.fit(
+train_history = model.fit(
     train,
     epochs=EPOCHS,
     validation_data=test
 )
+
+# %%
+predicted = model.predict(test)
+
+# %%
+PLOT_ROWS = 3
+SKIP_IMAGES = 10
+for row, ((image, gold_mask), pred_mask) in enumerate(zip(test.unbatch().take(SKIP_IMAGES + PLOT_ROWS), predicted)):
+    if row < SKIP_IMAGES:
+        continue
+
+    row_index = row - SKIP_IMAGES
+
+    ax_im = plt.subplot(PLOT_ROWS, 3, 3 * row_index + 1)
+    ax_im.imshow(image.numpy().astype('uint8'))
+
+    ax_g = plt.subplot(PLOT_ROWS, 3, 3 * row_index + 2)
+    ax_g.imshow(gold_mask.numpy().astype('uint8'), cmap='gray', vmin=0, vmax=1)
+
+    ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row_index + 3)
+    ax_p.imshow(pred_mask.astype('uint8'), cmap='gray', vmin=0, vmax=1)
 
 # %%
