@@ -21,6 +21,7 @@ AWE_H = 352  # divisible by 32
 AWE_C = 3
 GROUP_NORM = 16
 EPOCHS = 10
+# EXP_ID = "split-dev"
 
 # %%
 
@@ -43,12 +44,13 @@ def load_dataset(basedir, images, segments):
 
 
 # %%
-train = load_dataset(DATASET_PATH, 'train', 'trainannot')
-test = load_dataset(DATASET_PATH, 'test', 'testannot')
+train_orig = load_dataset(DATASET_PATH, 'train', 'trainannot')
+test_orig = load_dataset(DATASET_PATH, 'test', 'testannot')
 
 # %%
-train = train.cache().shuffle(SHUFFLE_SIZE).batch(BATCH_SIZE)
-test = test.cache().batch(BATCH_SIZE)
+train = train_orig.take(500).cache().shuffle(SHUFFLE_SIZE).batch(BATCH_SIZE)
+dev = train_orig.skip(500).cache().batch(BATCH_SIZE)
+test = test_orig.cache().batch(BATCH_SIZE)
 
 # %%
 efficientnet_b0 = tf.keras.applications.EfficientNetB0(
@@ -160,6 +162,15 @@ class AWEMaskIoU(tf.metrics.Mean):
 
 
 # %%
+# LOG_DIR = os.path.join("logs", "{}-{}-{}".format(
+#     os.path.basename(globals().get("__file__", "notebook")),
+#     datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S"),
+#     EXP_ID
+# ))
+# tb_callback = tf.keras.callbacks.TensorBoard(
+#     LOG_DIR, histogram_freq=1, update_freq=100, profile_batch=0)
+
+# %%
 model = tf.keras.Model(inputs=inputs, outputs=x)
 
 model.compile(
@@ -172,17 +183,18 @@ model.compile(
 train_history = model.fit(
     train,
     epochs=EPOCHS,
-    validation_data=test
+    validation_data=dev,
+    # callbacks=[tb_callback]
 )
 
 # %%
-predicted = model.predict(test)
+predicted = model.predict(dev)
 
 # %%
 PLOT_ROWS = 3
 SKIP_IMAGES = 20
 plt.figure(figsize=(24, 18))
-for row, ((image, gold_mask), pred_mask) in enumerate(zip(test.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS), predicted[SKIP_IMAGES:])):
+for row, ((image, gold_mask), pred_mask) in enumerate(zip(dev.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS), predicted[SKIP_IMAGES:])):
     ax_im = plt.subplot(PLOT_ROWS, 3, 3 * row + 1)
     ax_im.imshow(image.numpy().astype('uint8'))
     ax_im.axis('off')
