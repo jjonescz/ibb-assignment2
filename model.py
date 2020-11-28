@@ -28,14 +28,13 @@ EPOCHS = 1
 
 def load_dataset(basedir, images, segments):
     def transform(path):
-        def load(path):
+        def load(path, channels):
             image = tf.io.read_file(path)
-            image = tf.io.decode_png(image)
-            return tf.cast(image, dtype=tf.float32)
+            return tf.io.decode_png(image, channels=channels)
 
-        image = load(path)
+        image = load(path, AWE_C)
         mask_path = tf.strings.regex_replace(path, images, segments)
-        mask = load(mask_path)
+        mask = load(mask_path, 1)
         return image, mask
 
     images_dir = os.path.join(basedir, images)
@@ -151,8 +150,10 @@ model = tf.keras.Model(inputs=inputs, outputs=x)
 
 model.compile(
     optimizer=tf.optimizers.RMSprop(),
-    loss=bce_dice_loss,
-    metrics=[AWEMaskIoU(name="accuracy")],
+    # loss=bce_dice_loss,
+    # metrics=[AWEMaskIoU(name="accuracy")],
+    loss=tf.keras.losses.BinaryCrossentropy(),
+    metrics=['accuracy']
 )
 
 # %%
