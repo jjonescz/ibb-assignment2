@@ -13,7 +13,7 @@ import tensorflow_addons as tfa
 
 # %%
 DATASET_PATH = "data"
-BATCH_SIZE = 32
+BATCH_SIZE = 10
 SHUFFLE_SIZE = 500
 AWE_W = 480
 AWE_H = 360
@@ -110,11 +110,11 @@ def skip(x, c, channels):
 # x = decoder(x, 512, 256)
 # x = skip(x, c3, 256)
 x = c3
-x = decoder(x, 256, 128)
+x = deconv_block(x, 256, 3)
 x = skip(x, c2, 128)
-x = decoder(x, 128, 64)
+x = deconv_block(x, 128, 3)
 x = skip(x, c1, 64)
-x = decoder(x, 64, 64)
+x = deconv_block(x, 64, 3)
 
 # Head
 x = deconv_block(x, 32, 3, 2)
@@ -162,7 +162,7 @@ class AWEMaskIoU(tf.metrics.Mean):
 model = tf.keras.Model(inputs=inputs, outputs=x)
 
 model.compile(
-    optimizer=tf.optimizers.RMSprop(),
+    optimizer=tf.optimizers.Adam(),
     # loss=bce_dice_loss,
     # metrics=[AWEMaskIoU(name="accuracy")],
     loss=tf.keras.losses.BinaryCrossentropy(),
