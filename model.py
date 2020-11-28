@@ -50,7 +50,7 @@ test = test.cache().batch(BATCH_SIZE)
 
 # %%
 efficientnet_b0 = tf.keras.applications.EfficientNetB0(
-    include_top=False, input_shape=[AWE_H, AWE_W, AWE_C])
+    include_top=False, input_shape=(AWE_H, AWE_W, AWE_C))
 efficientnet_b0.trainable = False
 
 # %%
@@ -61,11 +61,17 @@ efficientnet_layer_names = [
     'block2b_add',
     'block1a_project_bn'
 ]
-[c5, c4, c3, c2, c1] = [efficientnet_b0.get_layer(
+efficientnet_outputs = [efficientnet_b0.get_layer(
     name=name).output for name in efficientnet_layer_names]
 
+efficientnet_model = tf.keras.Model(
+    inputs=efficientnet_b0.input, outputs=efficientnet_outputs)
+efficientnet_model.trainable = False
+
 # %%
-inputs = efficientnet_b0.input
+x = inputs = tf.keras.layers.Input(shape=(AWE_H, AWE_W, AWE_C))
+
+[c5, c4, c3, c2, c1] = efficientnet_model(x)
 
 
 def conv_block(x, channels, kernel_size, stride=1):
