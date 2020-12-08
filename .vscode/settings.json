@@ -4,5 +4,8 @@
     },
     "[bibtex]": {
         "editor.formatOnSave": false
-    }
+    },
+    "cSpell.words": [
+        "convolutional"
+    ]
 }

@@ -60,17 +60,22 @@ Then I present performance results.
 I developed a convolutional neural network (CNN) that can segment ears pixel-wise.
 This network is intended for use in biometric pipeline.
 The architecture has been developed from scratch based on my knowledge from deep learning course~\cite{npfl114}.
-For training and evaluation, I have used AWE dataset~\cite{awe}.
+For training and evaluation, I have used AWE-W dataset~\cite{awe}.
 Source code of both the model and this report can be found in GitHub repository~\cite{repo}.
 
 \section{Methodology}
-Praesent at mollis diam. Suspendisse fringilla feugiat porttitor~\cite{neuro2008,neuro2013}. Donec accumsan non libero sed rutrum. In maximus cursus mauris, eget consectetur purus semper vel. Vivamus non dictum nisi. Duis et quam nec lacus faucibus porttitor. Suspendisse potenti. In dignissim blandit viverra. Proin aliquam vulputate nisl ac sollicitudin.
+The chosen dataset is already split into training and testing subsets (750 and 250 images, respectively).
+I have further subdivided the original training data into (actual) training and development subsets (500 and 250 images, respectively).
+Both of these training subsets were used during development of the detector.
+Testing data were used only during final evaluation.
 
- Suspendisse et quam eget dui commodo aliquet. Nunc eu sagittis tellus, non faucibus velit. Quisque in tempus turpis, non placerat elit. Sed vitae imperdiet felis~\cite{Jain2004,Jain2011}.
+All images are already resized to the same size ($480 \times 360$ pixels) in the dataset.
+In order to use them easily in convolutional layers of the CNN, I have resized them to dimensions divisible by 32 ($480 \times 352$ pixels) during preprocessing.
 
-Proin at dolor at enim aliquet dignissim eget id ante. Cras quis magna a lorem posuere lacinia eget quis felis. Vestibulum consequat lacinia justo a elementum. Morbi sed placerat dolor. Duis urna massa, venenatis quis tincidunt feugiat, interdum eu tellus. Mauris ullamcorper, arcu sit amet fringilla scelerisque, lacus lectus vehicula ipsum, eu lacinia mauris dolor a arcu.
+The CNN uses pre-trained EfficientNet-B0 network~\cite{efficientNet} as encoder in U-Net-like architecture~\cite{unet} and custom decoder and segmentation head.
+EfficientNet-B0 takes pixels as input and outputs them scaled down 32 times. The decoder uses transposed convolutions to scale these features back to the original resolution and employs skip layers to pass information from the corresponding layer of the encoder.
 
-In ut arcu eget nisl maximus blandit a vitae elit. Nulla laoreet est eu sapien blandit luctus. Suspendisse quis porttitor leo. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse volutpat sem risus, facilisis laoreet leo rhoncus ac. Etiam non quam felis. Vestibulum vel magna imperdiet, faucibus turpis vel, sagittis dolor.
+The encoder has its weights fixed to the pre-trained values. Only encoder's weights are trained. The CNN has 6.9 million trained parameters and 4.0 million fixed parameters.
 
 \section{Results}
 Nulla sodales, metus at faucibus iaculis, felis risus pulvinar erat, in pretium arcu ex sed elit. Cras ultrices felis in diam dictum interdum. Praesent in interdum dolor, ut varius massa. Integer non efficitur risus, nec dapibus dui. Nunc sollicitudin nibh in orci pretium, quis congue ligula faucibus. Vivamus fermentum leo ac euismod porta as shown in Figure~\ref{fig:plot1}.
