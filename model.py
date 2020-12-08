@@ -214,7 +214,7 @@ plt.legend()
 plt.xlabel('epoch')
 plt.ylabel('BCE dice loss')
 plt.title('Loss during training')
-plt.savefig('figures/loss.pdf')
+plt.savefig('figures/loss.pdf', bbox_inches='tight', pad_inches=0)
 
 # %%
 accuracy_history = train_history_dict['accuracy']
@@ -225,7 +225,7 @@ plt.legend()
 plt.xlabel('epoch')
 plt.ylabel('IoU')
 plt.title('IoU during training')
-plt.savefig('figures/iou.pdf')
+plt.savefig('figures/iou.pdf', bbox_inches='tight', pad_inches=0)
 
 # %%
 predictions = model.predict(dev)
@@ -278,7 +278,7 @@ def plot_examples(name, indices):
         ax_p.axis('off')
         if row == 0:
             ax_p.set_title('Predicted', fontsize=40)
-    plt.savefig(f'figures/{name}.pdf')
+    plt.savefig(f'figures/{name}.pdf', bbox_inches='tight', pad_inches=0)
 
 
 # %%
