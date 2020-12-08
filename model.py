@@ -1,11 +1,5 @@
 # %%
-import argparse
-import datetime
 import os
-import re
-import PIL
-import PIL.Image
-import PIL.ImageChops
 import matplotlib.pyplot as plt
 import json
 
