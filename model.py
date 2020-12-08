@@ -149,7 +149,7 @@ model = tf.keras.Model(inputs=inputs, outputs=x)
 model.compile(
     optimizer=tf.optimizers.Adam(),
     loss=bce_dice_loss,
-    metrics=[AWEMaskIoU(name="IoU")]
+    metrics=[AWEMaskIoU(name="accuracy")]
 )
 
 # Create callback which will save checkpoints during training.
