@@ -198,23 +198,22 @@ train_history = model.fit(
 model.save_weights(os.path.join(LOG_DIR, 'weights.h5'))
 
 # %%
-predicted = model.predict(dev)
-
-# %%
 PLOT_ROWS = 3
-SKIP_IMAGES = 20
+SKIP_IMAGES = 30
 plt.figure(figsize=(24, 18))
-for row, ((image, gold_mask), pred_mask) in enumerate(zip(dev.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS), predicted[SKIP_IMAGES:])):
+for row, (image, gold_mask) in enumerate(dev.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS)):
+    pred_mask = model.predict(tf.expand_dims(image, 0))[0]
+
     ax_im = plt.subplot(PLOT_ROWS, 3, 3 * row + 1)
     ax_im.imshow(image.numpy().astype('uint8'))
     ax_im.axis('off')
 
     ax_g = plt.subplot(PLOT_ROWS, 3, 3 * row + 2)
-    ax_g.imshow(gold_mask.numpy().astype('uint8'), cmap='gray', vmin=0, vmax=1)
+    ax_g.imshow(gold_mask.numpy(), cmap='gray', vmin=0, vmax=1)
     ax_g.axis('off')
 
     ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row + 3)
-    ax_p.imshow(pred_mask.astype('uint8'), cmap='gray', vmin=0, vmax=1)
+    ax_p.imshow(pred_mask.round(), cmap='gray', vmin=0, vmax=1)
     ax_p.axis('off')
 
 # %%
