@@ -195,6 +195,9 @@ train_history = model.fit(
 )
 
 # %%
+model.save_weights(os.path.join(LOG_DIR, 'weights.h5'))
+
+# %%
 predicted = model.predict(dev)
 
 # %%
@@ -213,8 +216,5 @@ for row, ((image, gold_mask), pred_mask) in enumerate(zip(dev.unbatch().skip(SKI
     ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row + 3)
     ax_p.imshow(pred_mask.astype('uint8'), cmap='gray', vmin=0, vmax=1)
     ax_p.axis('off')
-
-# %%
-model.save_weights('model.h5')
 
 # %%
