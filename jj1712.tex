@@ -95,7 +95,7 @@ Therefore I chose 35 as number of epochs for training noting that larger number 
 \end{figure}
 
 Three best (97.9~\%, 97.8~\%, 97.7~\%) and three worst (22.7~\%, 33.1~\% 61.5~\%) IoU results in development data can be seen in Figure~\ref{fig:examples}.
-Overall distribution of IoU in development dataset can be seen in Figure~\ref{fig:hist}.
+The worst IoU results illustrate some problems the network might have, i.e., grayscale images, small faces (due to more people in the picture) and earrings, respectively.
 
 \begin{figure}[H]
     \centering
@@ -105,6 +105,9 @@ Overall distribution of IoU in development dataset can be seen in Figure~\ref{fi
     \caption{Three best (top) and three worst (bottom) segmentation results.}
     \label{fig:examples}
 \end{figure}
+
+Overall distribution of IoU in development dataset can be seen in Figure~\ref{fig:hist}.
+It can be seen that most data are segmented very well (IoU more than 90~\%).
 
 \begin{figure}[H]
     \centering
