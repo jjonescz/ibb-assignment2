@@ -22,6 +22,7 @@ AWE_C = 3
 GROUP_NORM = 16
 EPOCHS = 10
 EXP_ID = "save-checkpoints"
+TRAIN = False  # `True` = train, `False` = load saved checkpoints
 
 # %%
 
@@ -162,11 +163,7 @@ class AWEMaskIoU(tf.metrics.Mean):
 
 
 # %%
-LOG_DIR = os.path.join("logs", "{}-{}-{}".format(
-    os.path.basename(globals().get("__file__", "notebook")),
-    datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S"),
-    EXP_ID
-))
+LOG_DIR = os.path.join("logs", EXP_ID)
 # tb_callback = tf.keras.callbacks.TensorBoard(
 #     LOG_DIR, histogram_freq=1, update_freq=100, profile_batch=0)
 
@@ -187,15 +184,20 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(
 )
 
 # %%
-train_history = model.fit(
-    train,
-    epochs=EPOCHS,
-    validation_data=dev,
-    callbacks=[cp_callback]
-)
+if TRAIN:
+    train_history = model.fit(
+        train,
+        epochs=EPOCHS,
+        validation_data=dev,
+        callbacks=[cp_callback]
+    )
 
 # %%
-model.save_weights(os.path.join(LOG_DIR, 'weights.h5'))
+weights_path = os.path.join(LOG_DIR, 'weights.h5')
+if TRAIN:
+    model.save_weights(weights_path)
+else:
+    model.load_weights(weights_path)
 
 # %%
 PLOT_ROWS = 3
