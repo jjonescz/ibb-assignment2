@@ -225,3 +225,25 @@ for row, (image, gold_mask) in enumerate(dev.unbatch().skip(SKIP_IMAGES).take(PL
     ax_p.axis('off')
 
 # %%
+loss_history = train_history_dict['loss']
+val_loss_history = train_history_dict['val_loss']
+plt.plot(loss_history, label='training')
+plt.plot(val_loss_history, label='development')
+plt.legend()
+plt.xlabel('epoch')
+plt.ylabel('BCE dice loss')
+plt.title('Loss during training')
+plt.savefig('figures/loss.pdf')
+
+# %%
+accuracy_history = train_history_dict['accuracy']
+val_accuracy_history = train_history_dict['val_accuracy']
+plt.plot(accuracy_history, label='training')
+plt.plot(val_accuracy_history, label='development')
+plt.legend()
+plt.xlabel('epoch')
+plt.ylabel('IoU')
+plt.title('IoU during training')
+plt.savefig('figures/iou.pdf')
+
+# %%

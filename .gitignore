@@ -11,13 +11,13 @@ __pycache__/
 /logs/
 
 # LaTeX
-*.aux
-*.fdb_latexmk
-*.fls
-*.log
-*.out
-*.pdf
-*.synctex.gz
-*.synctex(busy)
-*.bbl
-*.blg
+/*.aux
+/*.fdb_latexmk
+/*.fls
+/*.log
+/*.out
+/*.pdf
+/*.synctex.gz
+/*.synctex(busy)
+/*.bbl
+/*.blg
