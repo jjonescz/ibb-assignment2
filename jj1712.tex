@@ -80,6 +80,7 @@ The encoder has its weights fixed to the pre-trained values. Only encoder's weig
 \section{Results}
 I have used intersection over union (IoU) to evaluate model's performance.
 To train the CNN, I have used BCE-Dice loss function.
+This loss was optimized using Adam optimizer with standard learning rate 0.001.
 
 From evolution of these metrics during training~\ref{fig:evo}, I would ideally conclude number of epochs for training where loss would stop decreasing.
 Unfortunately, neither loss nor accuracy converged after 35 epochs and I did not posses computing power where evaluating more epochs would be feasible.
@@ -94,13 +95,22 @@ Therefore I chose 35 as number of epochs for training noting that larger number 
 \end{figure}
 
 Three best (97.9~\%, 97.8~\%, 97.7~\%) and three worst (22.7~\%, 33.1~\% 61.5~\%) IoU results in development data can be seen in Figure~\ref{fig:examples}.
+Overall distribution of IoU in development dataset can be seen in Figure~\ref{fig:hist}.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.49\columnwidth]{examples-best}
-    \includegraphics[width=0.49\columnwidth]{examples-worst}
-    \caption{Three best (left) and three worst (right) segmentation results.}
+    \includegraphics[width=1\columnwidth]{examples-best}\\
+    \vspace{0.5cm}
+    \includegraphics[width=1\columnwidth]{examples-worst}
+    \caption{Three best (top) and three worst (bottom) segmentation results.}
     \label{fig:examples}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\columnwidth]{iou-hist}
+    \caption{Histogram of IoU in development dataset.}
+    \label{fig:hist}
 \end{figure}
 
 Final mean IoU on training data was 92.7~\%, mean IoU on development data was 91.5~\% and mean IoU on testing data was 83.2~\%.

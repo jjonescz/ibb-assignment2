@@ -286,3 +286,10 @@ plot_examples('examples-best', best)
 plot_examples('examples-worst', worst)
 
 # %%
+plt.hist(prediction_ious)
+plt.title('IoU in development dataset')
+plt.xlabel('intersection over union (IoU)')
+plt.ylabel('number of images')
+plt.savefig('figures/iou-hist.pdf', bbox_inches='tight', pad_inches=0)
+
+# %%
