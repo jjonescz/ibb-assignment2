@@ -106,8 +106,10 @@ Three best (97.9~\%, 97.8~\%, 97.7~\%) and three worst (22.7~\%, 33.1~\% 61.5~\%
 Final mean IoU on training data was 92.7~\%, mean IoU on development data was 91.5~\% and mean IoU on testing data was 83.2~\%.
 
 \section{Conclusion}
-
-Aenean tincidunt sodales ante et egestas. Nam consectetur nunc iaculis tincidunt egestas. Vivamus sagittis mi et vehicula facilisis. Phasellus semper volutpat gravida. Vestibulum vitae neque sed purus pharetra suscipit eget mollis dui. Morbi lobortis justo a lacus feugiat, et finibus eros tristique.
+The trained CNN shows very good results as is and there is also some space for future improvement.
+Image augmentation would help making the training dataset more diverse (e.g., horizontal/vertical flips, color transformations, cutouts, etc.).
+Fine-tuning (a process where the pre-trained EfficientNet is also trained with low learning rate) usually also improves performance.
+Finally, architecture of the CNN could be more complex (e.g., higher-level EfficientNet could be used) but that would also make training more computing-intensive and hence slower.
 
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography}
