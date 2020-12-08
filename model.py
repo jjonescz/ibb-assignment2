@@ -205,7 +205,7 @@ plt.savefig('figures/iou.pdf', bbox_inches='tight', pad_inches=0)
 plt.clf()
 
 # Run the model on development data.
-predictions = model.predict(dev)
+predictions = model.predict(dev, verbose=1)
 
 
 def compute_iou(gold, pred):
@@ -271,3 +271,7 @@ plt.xlabel('intersection over union (IoU)')
 plt.ylabel('number of images')
 plt.savefig('figures/iou-hist.pdf', bbox_inches='tight', pad_inches=0)
 plt.clf()
+
+# Evaluate test data.
+loss, iou = model.evaluate(test)
+print(f'IoU on test data: {iou:.2%}')
