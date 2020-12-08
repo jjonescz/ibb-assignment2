@@ -90,11 +90,11 @@ Therefore I chose 35 as number of epochs for training noting that larger number 
     \centering
     \includegraphics[width=0.49\columnwidth]{loss}
     \includegraphics[width=0.49\columnwidth]{iou}
-    \caption{Evolution of metrics during training.}
+    \caption{Evolution of metrics during training on training and development datasets.}
     \label{fig:evo}
 \end{figure}
 
-Three best (97.9~\%, 97.8~\%, 97.7~\%) and three worst (22.7~\%, 33.1~\% 61.5~\%) IoU results in development data can be seen in Figure~\ref{fig:examples}.
+Three best (97.9~\%, 97.8~\%, 97.7~\%) and three worst (22.7~\%, 33.1~\%, 61.5~\%) IoU results in development data can be seen in Figure~\ref{fig:examples}.
 The worst IoU results illustrate some problems the network might have, i.e., grayscale images, small faces (due to more people in the picture) and earrings, respectively.
 
 \begin{figure}[H]
@@ -102,14 +102,14 @@ The worst IoU results illustrate some problems the network might have, i.e., gra
     \includegraphics[width=1\columnwidth]{examples-best}\\
     \vspace{0.5cm}
     \includegraphics[width=1\columnwidth]{examples-worst}
-    \caption{Three best (top) and three worst (bottom) segmentation results.}
+    \caption{Three best (top) and three worst (bottom) segmentation results in development dataset.}
     \label{fig:examples}
 \end{figure}
 
-Overall distribution of IoU in development dataset can be seen in Figure~\ref{fig:hist}.
+Overall distribution of IoU in development dataset is depicted in Figure~\ref{fig:hist}.
 It can be seen that most data are segmented very well (IoU more than 90~\%).
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=1\columnwidth]{iou-hist}
     \caption{Histogram of IoU in development dataset.}
