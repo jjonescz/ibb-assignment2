@@ -9,3 +9,15 @@ __pycache__/
 
 # Tensorflow logs
 /logs/
+
+# LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.synctex(busy)
+*.bbl
+*.blg
