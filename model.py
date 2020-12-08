@@ -21,7 +21,7 @@ AWE_H = 352  # divisible by 32
 AWE_C = 3
 GROUP_NORM = 16
 EPOCHS = 10
-# EXP_ID = "split-dev"
+EXP_ID = "save-checkpoints"
 
 # %%
 
@@ -162,11 +162,11 @@ class AWEMaskIoU(tf.metrics.Mean):
 
 
 # %%
-# LOG_DIR = os.path.join("logs", "{}-{}-{}".format(
-#     os.path.basename(globals().get("__file__", "notebook")),
-#     datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S"),
-#     EXP_ID
-# ))
+LOG_DIR = os.path.join("logs", "{}-{}-{}".format(
+    os.path.basename(globals().get("__file__", "notebook")),
+    datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S"),
+    EXP_ID
+))
 # tb_callback = tf.keras.callbacks.TensorBoard(
 #     LOG_DIR, histogram_freq=1, update_freq=100, profile_batch=0)
 
@@ -180,11 +180,18 @@ model.compile(
 )
 
 # %%
+cp_callback = tf.keras.callbacks.ModelCheckpoint(
+    filepath=os.path.join(LOG_DIR, 'train-{epoch:04d}.ckpt'),
+    save_weights_only=True,
+    verbose=1
+)
+
+# %%
 train_history = model.fit(
     train,
     epochs=EPOCHS,
     validation_data=dev,
-    # callbacks=[tb_callback]
+    callbacks=[cp_callback]
 )
 
 # %%
@@ -206,5 +213,8 @@ for row, ((image, gold_mask), pred_mask) in enumerate(zip(dev.unbatch().skip(SKI
     ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row + 3)
     ax_p.imshow(pred_mask.astype('uint8'), cmap='gray', vmin=0, vmax=1)
     ax_p.axis('off')
+
+# %%
+model.save_weights('model.h5')
 
 # %%
