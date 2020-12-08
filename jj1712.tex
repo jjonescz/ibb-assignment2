@@ -37,12 +37,10 @@
 % ============================================================================================
 
 \title{\vspace{0ex} %
-% TITLE IN HERE:
-Nice and Brief Title in Here
-\\ \large{Assignment \#N}\\ \normalsize{Image Based Biometrics 20xx/xx, Faculty of Computer and Information Science, University of Ljubljana}}
+Ear Detector
+\\ \large{Assignment \#2}\\ \normalsize{Image Based Biometrics 2020/21, Faculty of Computer and Information Science, University of Ljubljana}}
 \author{ %
-% AUTHOR IN HERE:
-Polly~Esther
+Jan~Joneš
 \vspace{-4.0ex}
 }
 
@@ -53,11 +51,17 @@ Polly~Esther
 \maketitle
 
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vestibulum orci non molestie aliquam. Cras pulvinar porta ipsum in imperdiet. Vestibulum ac feugiat ligula. Vestibulum lacus magna, tincidunt eu orci in, facilisis laoreet eros. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec at erat iaculis, viverra turpis in, lacinia est. Donec sodales ullamcorper tortor sed posuere. Vestibulum lacus magna, tincidunt eu orci in, facilisis laoreet eros. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec at erat iaculis, viverra turpis in, lacinia est. Donec sodales ullamcorper tortor sed posuere. Cum sociis natoque penatibus.
+In this report, I describe results of developing an ear detector.
+First I describe detector architecture.
+Then I present performance results.
 \end{abstract}
 
 \section{Introduction}
-Proin commodo ullamcorper est, congue bibendum leo. Fusce ac odio non leo euismod mattis. Etiam hendrerit elit sit amet nisl gravida scelerisque. Fusce fringilla purus ipsum, ut interdum risus pretium nec. Sed luctus dui sit amet risus ornare semper nec vitae tellus. Vivamus facilisis, orci ut fermentum lobortis, magna tortor viverra dui, nec vestibulum tellus nulla ac enim. Curabitur feugiat lacus faucibus malesuada elementum~\cite{neurocomputing4,neurocomputing5}. Etiam eget lorem id elit vulputate volutpat. Aliquam erat volutpat. Vestibulum pretium velit ac ultrices hendrerit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+I developed a convolutional neural network (CNN) that can segment ears pixel-wise.
+This network is intended for use in biometric pipeline.
+The architecture has been developed from scratch based on my knowledge from deep learning course~\cite{npfl114}.
+For training and evaluation, I have used AWE dataset~\cite{awe}.
+Source code of both the model and this report can be found in GitHub repository~\cite{repo}.
 
 \section{Methodology}
 Praesent at mollis diam. Suspendisse fringilla feugiat porttitor~\cite{neuro2008,neuro2013}. Donec accumsan non libero sed rutrum. In maximus cursus mauris, eget consectetur purus semper vel. Vivamus non dictum nisi. Duis et quam nec lacus faucibus porttitor. Suspendisse potenti. In dignissim blandit viverra. Proin aliquam vulputate nisl ac sollicitudin.
