@@ -78,20 +78,24 @@ EfficientNet-B0 takes pixels as input and outputs them scaled down 32 times. The
 The encoder has its weights fixed to the pre-trained values. Only encoder's weights are trained. The CNN has 6.9 million trained parameters and 4.0 million fixed parameters.
 
 \section{Results}
-Nulla sodales, metus at faucibus iaculis, felis risus pulvinar erat, in pretium arcu ex sed elit. Cras ultrices felis in diam dictum interdum. Praesent in interdum dolor, ut varius massa. Integer non efficitur risus, nec dapibus dui. Nunc sollicitudin nibh in orci pretium, quis congue ligula faucibus. Vivamus fermentum leo ac euismod porta as shown in Figure~\ref{fig:plot1}.
+I have used intersection over union (IoU) to evaluate model's performance.
+To train the CNN, I have used BCE-Dice loss function.
+
+From evolution of these metrics during training~\ref{fig:evo}, I would ideally conclude number of epochs for training where loss would stop decreasing.
+Unfortunately, neither loss nor accuracy converged after 35 epochs and I did not posses computing power where evaluating more epochs would be feasible.
+Therefore I chose 35 as number of epochs for training noting that larger number would probably yield even better results.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\columnwidth]{loss}
-    \includegraphics[width=1\columnwidth]{iou}
-    \includegraphics[width=1\columnwidth]{example}
-    \caption{A nice plot showing something really cool and awesome.}
-    \label{fig:plot1}
+    \includegraphics[width=0.49\columnwidth]{loss}
+    \includegraphics[width=0.49\columnwidth]{iou}
+    \caption{Evolution of metrics during training.}
+    \label{fig:evo}
 \end{figure}
- 
-Sed et enim non justo mattis finibus sed at felis. Phasellus vel nibh vehicula, consectetur lectus in, bibendum enim. Nam rutrum suscipit magna id maximus. Quisque posuere lorem vel ante viverra, ut euismod sapien pulvinar. Fusce vitae maximus nibh. Sed dignissim dignissim nunc eu finibus. In pulvinar purus nisl, et mattis magna pretium ac. Curabitur nec massa vel est eleifend cursus nec sed elit. Vestibulum at nibh felis. Sed porttitor ut turpis in tristique.
 
- \section{Conclusion}
+Final mean IoU on training data was 92.7~\%, mean IoU on development data was 91.5~\% and mean IoU on testing data was 83.2~\%.
+
+\section{Conclusion}
 
 Aenean tincidunt sodales ante et egestas. Nam consectetur nunc iaculis tincidunt egestas. Vivamus sagittis mi et vehicula facilisis. Phasellus semper volutpat gravida. Vestibulum vitae neque sed purus pharetra suscipit eget mollis dui. Morbi lobortis justo a lacus feugiat, et finibus eros tristique.
 
