@@ -199,8 +199,8 @@ model.save_weights(os.path.join(LOG_DIR, 'weights.h5'))
 
 # %%
 PLOT_ROWS = 3
-SKIP_IMAGES = 30
-plt.figure(figsize=(24, 18))
+SKIP_IMAGES = 50
+plt.figure(figsize=(24, 6 * PLOT_ROWS))
 for row, (image, gold_mask) in enumerate(dev.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS)):
     pred_mask = model.predict(tf.expand_dims(image, 0))[0]
 
