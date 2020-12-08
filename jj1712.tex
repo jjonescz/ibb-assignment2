@@ -73,7 +73,7 @@ All images are already resized to the same size ($480 \times 360$ pixels) in the
 In order to use them easily in convolutional layers of the CNN, I have resized them to dimensions divisible by 32 ($480 \times 352$ pixels) during preprocessing.
 
 The CNN uses pre-trained EfficientNet-B0 network~\cite{efficientNet} as encoder in U-Net-like architecture~\cite{unet} and custom decoder and segmentation head.
-EfficientNet-B0 takes pixels as input and outputs them scaled down 32 times. The decoder uses transposed convolutions to scale these features back to the original resolution and employs skip layers to pass information from the corresponding layer of the encoder.
+EfficientNet-B0 takes pixels as input and outputs them scaled down 32 times. The decoder uses transposed convolutions to scale these features back to the original resolution and employs skip layers to pass information from the corresponding layer of the encoder. Segmentation head consists of transposed convolution and sigmoid activation layer.
 
 The encoder has its weights fixed to the pre-trained values. Only encoder's weights are trained. The CNN has 6.9 million trained parameters and 4.0 million fixed parameters.
 
