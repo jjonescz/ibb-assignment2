@@ -21,8 +21,8 @@ AWE_W = 480
 AWE_H = 352  # divisible by 32
 AWE_C = 3
 GROUP_NORM = 16
-EPOCHS = 10
-EXP_ID = "save-checkpoints"
+EPOCHS = 35
+EXP_ID = "more-epochs"
 TRAIN = False  # `True` = train, `False` = load saved checkpoints
 
 # %%
