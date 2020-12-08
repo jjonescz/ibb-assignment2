@@ -16,3 +16,15 @@ tensorflow-addons==0.11.2
 
 Additionally, `data/` folder must contain unzipped dataset AWE-W provided in the
 assignment (unzipped so that e.g. `data/train/0001.png` is valid path).
+
+## Running
+
+Script `model.py` can be run as-is. It will download EfficientNet-B0 weights and
+use weights for the rest of the model saved in `out/final/weights.h5` to
+construct the CNN model. It won't perform any training, just evaluation.
+
+To train the model, change `TRAIN` constant defined near top of `model.py` to:
+
+```py
+TRAIN = True
+```
