@@ -206,32 +206,6 @@ else:
     model.load_weights(weights_path)
 
 # %%
-PLOT_ROWS = 3
-SKIP_IMAGES = 0
-plt.figure(figsize=(24, 6 * PLOT_ROWS))
-for row, (image, gold_mask) in enumerate(dev.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS)):
-    pred_mask = model.predict(tf.expand_dims(image, 0))[0]
-
-    ax_im = plt.subplot(PLOT_ROWS, 3, 3 * row + 1)
-    ax_im.imshow(image.numpy().astype('uint8'))
-    ax_im.axis('off')
-    if row == 0:
-        ax_im.set_title('Original', fontsize=40)
-
-    ax_g = plt.subplot(PLOT_ROWS, 3, 3 * row + 2)
-    ax_g.imshow(gold_mask.numpy(), cmap='gray', vmin=0, vmax=1)
-    ax_g.axis('off')
-    if row == 0:
-        ax_g.set_title('Gold', fontsize=40)
-
-    ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row + 3)
-    ax_p.imshow(pred_mask.round(), cmap='gray', vmin=0, vmax=1)
-    ax_p.axis('off')
-    if row == 0:
-        ax_p.set_title('Predicted', fontsize=40)
-plt.savefig('figures/example.pdf')
-
-# %%
 loss_history = train_history_dict['loss']
 val_loss_history = train_history_dict['val_loss']
 plt.plot(loss_history, label='training')
@@ -252,5 +226,63 @@ plt.xlabel('epoch')
 plt.ylabel('IoU')
 plt.title('IoU during training')
 plt.savefig('figures/iou.pdf')
+
+# %%
+predictions = model.predict(dev)
+
+# %%
+
+
+def compute_iou(gold, pred):
+    iou = AWEMaskIoU()
+    iou.update_state(gold, pred)
+    return iou.result()
+
+
+prediction_ious = np.array([
+    compute_iou(gold, pred)
+    for (_, gold), pred in zip(dev.unbatch(), predictions)
+])
+
+# %%
+K = 3
+worst = prediction_ious.argsort()[:K]
+best = (-prediction_ious).argsort()[:K]
+
+# %%
+
+
+def plot_examples(name, indices):
+    rows = len(indices)
+    plt.figure(figsize=(24, 6 * rows))
+    for row, i in enumerate(indices):
+        image, gold_mask = None, None
+        for image, gold_mask in dev.unbatch().skip(i).take(1):
+            break
+        pred_mask = predictions[i]
+
+        ax_im = plt.subplot(rows, 3, 3 * row + 1)
+        ax_im.imshow(image.numpy().astype('uint8'))
+        ax_im.axis('off')
+        if row == 0:
+            ax_im.set_title('Original', fontsize=40)
+
+        ax_g = plt.subplot(rows, 3, 3 * row + 2)
+        ax_g.imshow(gold_mask.numpy(), cmap='gray', vmin=0, vmax=1)
+        ax_g.axis('off')
+        if row == 0:
+            ax_g.set_title('Gold', fontsize=40)
+
+        ax_p = plt.subplot(rows, 3, 3 * row + 3)
+        ax_p.imshow(pred_mask.round(), cmap='gray', vmin=0, vmax=1)
+        ax_p.axis('off')
+        if row == 0:
+            ax_p.set_title('Predicted', fontsize=40)
+    plt.savefig(f'figures/{name}.pdf')
+
+
+# %%
+plot_examples('examples-best', best)
+plot_examples('examples-worst', worst)
 
 # %%
