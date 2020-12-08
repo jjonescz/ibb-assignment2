@@ -2,4 +2,7 @@
     "[latex]": {
         "editor.formatOnSave": false
     },
+    "[bibtex]": {
+        "editor.formatOnSave": false
+    }
 }
