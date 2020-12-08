@@ -207,7 +207,7 @@ else:
 
 # %%
 PLOT_ROWS = 3
-SKIP_IMAGES = 50
+SKIP_IMAGES = 0
 plt.figure(figsize=(24, 6 * PLOT_ROWS))
 for row, (image, gold_mask) in enumerate(dev.unbatch().skip(SKIP_IMAGES).take(PLOT_ROWS)):
     pred_mask = model.predict(tf.expand_dims(image, 0))[0]
@@ -215,14 +215,21 @@ for row, (image, gold_mask) in enumerate(dev.unbatch().skip(SKIP_IMAGES).take(PL
     ax_im = plt.subplot(PLOT_ROWS, 3, 3 * row + 1)
     ax_im.imshow(image.numpy().astype('uint8'))
     ax_im.axis('off')
+    if row == 0:
+        ax_im.set_title('Original', fontsize=40)
 
     ax_g = plt.subplot(PLOT_ROWS, 3, 3 * row + 2)
     ax_g.imshow(gold_mask.numpy(), cmap='gray', vmin=0, vmax=1)
     ax_g.axis('off')
+    if row == 0:
+        ax_g.set_title('Gold', fontsize=40)
 
     ax_p = plt.subplot(PLOT_ROWS, 3, 3 * row + 3)
     ax_p.imshow(pred_mask.round(), cmap='gray', vmin=0, vmax=1)
     ax_p.axis('off')
+    if row == 0:
+        ax_p.set_title('Predicted', fontsize=40)
+plt.savefig('figures/example.pdf')
 
 # %%
 loss_history = train_history_dict['loss']
