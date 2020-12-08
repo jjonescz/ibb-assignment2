@@ -7,6 +7,7 @@ import PIL
 import PIL.Image
 import PIL.ImageChops
 import matplotlib.pyplot as plt
+import json
 
 import numpy as np
 import tensorflow as tf
@@ -184,6 +185,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(
 )
 
 # %%
+history_path = os.path.join(LOG_DIR, 'history.json')
 if TRAIN:
     train_history = model.fit(
         train,
@@ -191,6 +193,10 @@ if TRAIN:
         validation_data=dev,
         callbacks=[cp_callback]
     )
+    train_history_dict = train_history.history
+    json.dump(train_history_dict, open(history_path, 'w'))
+else:
+    train_history_dict = json.load(open(history_path, 'r'))
 
 # %%
 weights_path = os.path.join(LOG_DIR, 'weights.h5')
